@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#081426">
+<title>Crack the Code | Detective Missions</title>
+<style>
+:root{--bg:#07111f;--panel:#101e31;--panel2:#14263d;--ink:#f4f0e7;--muted:#a9b8c9;--red:#e53d4d;--cyan:#65d7ee;--gold:#e7bd70;--green:#53d69a}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 50% -10%,#1d4165 0%,#0a1728 45%,#050b14 100%);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:linear-gradient(transparent 95%,#6ba5c9 96%),linear-gradient(90deg,transparent 95%,#6ba5c9 96%);background-size:36px 36px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:min(100% - 28px,760px);margin:0 auto;padding:22px 0 36px;position:relative}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
+.brand{display:flex;align-items:center;gap:10px;font-size:.8rem;letter-spacing:.18em;font-weight:900;color:#dbe9f5}
+.brand-mark{width:36px;height:36px;border:1px solid #46708c;border-radius:50%;display:grid;place-items:center;color:var(--cyan);font-size:20px;box-shadow:0 0 20px #65d7ee22}
+.case-tag{border:1px solid #2e4760;background:#0d1b2c;color:var(--muted);padding:7px 10px;border-radius:4px;font-size:.7rem;letter-spacing:.12em}
+.hero{text-align:center;margin:20px 0 25px}
+.kicker{color:var(--cyan);letter-spacing:.25em;font-size:.7rem;font-weight:800}
+h1{font-size:clamp(2.1rem,9vw,4.3rem);line-height:.98;letter-spacing:-.055em;margin:12px 0 10px;font-weight:1000;text-transform:uppercase}
+h1 span{color:var(--red);text-shadow:0 0 22px #e53d4d33}
+.subtitle{color:var(--muted);max-width:480px;margin:0 auto;line-height:1.6;font-size:.95rem}
+.rule{height:1px;background:linear-gradient(90deg,transparent,#45627d,transparent);margin:22px 0}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:10px;margin:0 0 14px}
+.section-head h2{font-size:1rem;letter-spacing:.12em;margin:0;text-transform:uppercase}
+.section-head p{margin:0;color:var(--muted);font-size:.78rem}
+.modules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.module{position:relative;overflow:hidden;text-align:left;min-height:124px;padding:16px;border:1px solid #304760;border-radius:9px;color:var(--ink);background:linear-gradient(140deg,#172a40,#0d192a);box-shadow:0 8px 24px #0003;transition:transform .15s,border-color .15s}
+.module:hover,.module:focus-visible{transform:translateY(-2px);border-color:var(--cyan);outline:none}
+.module:after{content:"";position:absolute;width:90px;height:90px;border:1px solid #ffffff0c;border-radius:50%;right:-28px;bottom:-38px;box-shadow:0 0 0 12px #ffffff05,0 0 0 24px #ffffff03}
+.module-num{color:var(--gold);font-size:.7rem;letter-spacing:.18em;font-weight:900}
+.module-title{display:block;margin:9px 0 12px;font-size:1.05rem;font-weight:850}
+.module-foot{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:.72rem}
+.module-status{color:var(--green);font-weight:800}
+.module.done{border-color:#34785f;background:linear-gradient(140deg,#12362f,#0d1d2a)}
+.panel{border:1px solid #304760;border-radius:12px;background:linear-gradient(150deg,#14263b,#0b1625);padding:clamp(18px,5vw,30px);box-shadow:0 18px 55px #0004}
+.panel-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px}
+.eyebrow{font-size:.7rem;letter-spacing:.18em;color:var(--cyan);font-weight:900}
+.back{background:transparent;border:1px solid #3a5269;color:var(--muted);border-radius:5px;padding:7px 10px;font-size:.8rem}
+h2{margin:0}
+.panel h2{font-size:clamp(1.35rem,5vw,2rem);margin:7px 0 10px}
+.instructions{color:var(--muted);line-height:1.55;margin:0 0 20px}
+.code-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:20px 0}
+.code-number{min-width:45px;padding:10px 8px;text-align:center;background:#f0d7a6;color:#182334;border-radius:5px;font-size:1.25rem;font-weight:950;box-shadow:0 3px 0 #9c7d4c}
+.hint{border-left:3px solid var(--gold);background:#e7bd7010;padding:11px 13px;color:#e9d6b2;font-size:.85rem;margin:18px 0}
+.field-label{display:block;color:#dbe7f1;font-size:.8rem;font-weight:800;margin:0 0 7px}
+.text-input{width:100%;padding:14px 13px;background:#07111e;border:1px solid #466580;border-radius:7px;color:#fff;outline:none}
+.text-input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #65d7ee1c}
+.primary{width:100%;border:0;border-radius:7px;padding:14px 16px;margin-top:12px;background:linear-gradient(100deg,#d92f42,#a8172a);color:#fff;font-weight:950;letter-spacing:.1em;text-transform:uppercase;box-shadow:0 6px 18px #e53d4d22}
+.primary:active{transform:translateY(1px)}
+.secondary{width:100%;border:1px solid #466580;border-radius:7px;padding:12px;background:#112239;color:#eaf4ff;font-weight:800;margin-top:10px}
+.feedback{display:none;border-radius:7px;padding:11px 12px;margin-top:12px;font-size:.88rem;font-weight:750}
+.feedback.show{display:block}.feedback.bad{background:#5b1721;color:#ffb8bf;border:1px solid #9c2d3a}.feedback.good{background:#123b30;color:#9cf0c8;border:1px solid #2b8a67}
+.options{display:grid;gap:10px;margin:18px 0}
+.option{display:flex;align-items:flex-start;gap:11px;width:100%;text-align:left;padding:13px;border:1px solid #354c64;background:#0b1828;color:var(--ink);border-radius:7px;line-height:1.4}
+.option .letter{flex:0 0 28px;height:28px;display:grid;place-items:center;border-radius:50%;background:#263c52;font-weight:900;font-size:.8rem}
+.option.selected{border-color:var(--cyan);background:#103046}
+.option.correct{border-color:var(--green);background:#123b30}
+.option.wrong{border-color:var(--red);background:#401b25}
+.option:disabled{cursor:default}
+.success{text-align:center;padding:28px 10px 18px}
+.success-icon{width:74px;height:74px;margin:0 auto 18px;border:2px solid var(--green);color:var(--green);border-radius:50%;display:grid;place-items:center;font-size:2.4rem;box-shadow:0 0 32px #53d69a20}
+.stamp{display:inline-block;border:3px solid var(--green);color:var(--green);font-weight:1000;font-size:clamp(1.5rem,7vw,2.3rem);letter-spacing:.06em;padding:8px 13px;transform:rotate(-3deg);margin:5px 0 16px}
+.countdown{height:6px;background:#24384b;border-radius:99px;overflow:hidden;margin:18px auto 0;max-width:300px}
+.countdown-fill{height:100%;width:100%;background:var(--green);transform-origin:left;animation:shrink 5s linear forwards}
+@keyframes shrink{to{transform:scaleX(0)}}
+.footer{text-align:center;color:#71869b;font-size:.72rem;margin:24px 0 0;letter-spacing:.05em}
+.hidden{display:none!important}
+@media(min-width:600px){.modules{grid-template-columns:repeat(3,minmax(0,1fr))}.module{min-height:145px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">⌕</div><span>DETECTIVE DIVISION</span></div>
+    <div class="case-tag">CASE FILE // 006</div>
+  </header>
+
+  <section id="selectionScreen">
+    <div class="hero">
+      <div class="kicker">YOUR NEXT CLUE IS HIDDEN</div>
+      <h1>CRACK <span>THE CODE</span></h1>
+      <p class="subtitle">Decode the evidence. Answer the question. Complete the mission.</p>
+    </div>
+    <div class="rule"></div>
+    <div class="section-head"><h2>Choose a module</h2><p id="progressText">6 cases available</p></div>
+    <div class="modules" id="moduleGrid"></div>
+  </section>
+
+  <section id="codeScreen" class="hidden">
+    <div class="panel">
+      <div class="panel-top"><div><div class="eyebrow" id="codeEyebrow">MISSION 01</div><h2>Crack the code</h2></div><button class="back" id="backFromCode">← Modules</button></div>
+      <p class="instructions">Each number represents a letter. Decode the sequence, then enter the word to unlock the case file.</p>
+      <div class="code-row" id="codeNumbers"></div>
+      <div class="hint">FIELD NOTE: A = 1, B = 2, C = 3 … Z = 26</div>
+      <form id="codeForm">
+        <label class="field-label" for="codeAnswer">Your decoded word</label>
+        <input class="text-input" id="codeAnswer" autocomplete="off" autocapitalize="characters" placeholder="ENTER YOUR ANSWER" required>
+        <button class="primary" type="submit">Unlock case file</button>
+      </form>
+      <div id="codeFeedback" class="feedback" role="status"></div>
+    </div>
+  </section>
+
+  <section id="questionScreen" class="hidden">
+    <div class="panel">
+      <div class="panel-top"><div><div class="eyebrow" id="questionEyebrow">CASE FILE UNLOCKED</div><h2 id="questionTitle">Question</h2></div><button class="back" id="backFromQuestion">← Modules</button></div>
+      <p class="instructions" id="questionText"></p>
+      <div class="options" id="options"></div>
+      <button class="primary" id="submitAnswer">Submit answer</button>
+      <div id="questionFeedback" class="feedback" role="status"></div>
+    </div>
+  </section>
+
+  <section id="successScreen" class="hidden">
+    <div class="panel success">
+      <div class="success-icon">✓</div>
+      <div class="eyebrow" id="successEyebrow">CASE CLOSED</div>
+      <div class="stamp">CORRECT!</div>
+      <h2 id="successTitle">Mission complete!</h2>
+      <p class="instructions">Excellent detective work. Returning to module selection in 5 seconds…</p>
+      <div class="countdown"><div class="countdown-fill" id="countdownFill"></div></div>
+      <button class="secondary" id="returnNow">Return now</button>
+    </div>
+  </section>
+
+  <section id="allDoneScreen" class="hidden">
+    <div class="panel success">
+      <div class="success-icon">★</div>
+      <div class="eyebrow">ALL CASES AVAILABLE AGAIN</div>
+      <h2>Every mission solved!</h2>
+      <p class="instructions">You've completed all six modules in this round. You can start another round whenever you're ready.</p>
+      <button class="primary" id="playAgain">Play again</button>
+    </div>
+  </section>
+  <footer class="footer">CONFIDENTIAL CASEWORK • THINK CAREFULLY • TRUST THE CLUES</footer>
+</main>
+<script>
+const modules = [
+ {id:1,title:"File Management",code:[6,9,12,5],word:"FILE",question:"Why is proper file management important?",options:["To make files harder to find","To keep documents organized and accessible","To increase unnecessary paperwork","To delete documents automatically"],correct:1},
+ {id:2,title:"Quality",code:[17,21,1,12,9,20,25],word:"QUALITY",question:"What is a key goal of quality management?",options:["To ignore defects","To meet requirements and continually improve","To avoid checking work","To finish without following procedures"],correct:1},
+ {id:3,title:"Safety",code:[19,1,6,5,20,25],word:"SAFETY",question:"What should you do when you notice a workplace hazard?",options:["Ignore it if nobody is nearby","Wait until the end of the week","Report it promptly and follow site procedures","Move on without telling anyone"],correct:2},
+ {id:4,title:"Training",code:[20,18,1,9,14,9,14,7],word:"TRAINING",question:"Why is workplace training important?",options:["It helps people perform tasks safely and correctly","It replaces all work instructions","It guarantees that mistakes never happen","It is only useful for new employees"],correct:0},
+ {id:5,title:"Process",code:[16,18,15,3,5,19,19],word:"PROCESS",question:"Why should an approved process be followed?",options:["To make tasks more confusing","To ensure work is carried out consistently","To avoid recording results","To skip required checks"],correct:1},
+ {id:6,title:"Standards",code:[19,20,1,14,4,1,18,4],word:"STANDARD",question:"What is the purpose of following a work standard?",options:["To let everyone invent a different method","To remove the need for training","To provide consistent requirements and expectations","To prevent improvements"],correct:2}
+];
+let currentModule=null, selectedOption=null, completedThisRound=new Set(), timerId=null;
+const $=id=>document.getElementById(id);
+function show(screen){["selectionScreen","codeScreen","questionScreen","successScreen","allDoneScreen"].forEach(id=>$(id).classList.toggle("hidden",id!==screen));window.scrollTo({top:0,behavior:"smooth"});}
+function renderModules(){
+ const grid=$("moduleGrid");grid.innerHTML="";
+ modules.forEach(m=>{
+  const done=completedThisRound.has(m.id);
+  const b=document.createElement("button");b.className="module"+(done?" done":"");b.type="button";
+  b.innerHTML=`<span class="module-num">CASE ${String(m.id).padStart(2,"0")}</span><span class="module-title">${m.title}</span><span class="module-foot"><span>${done?"Solved this round":"Tap to investigate"}</span><span class="module-status">${done?"✓ DONE":"↗ OPEN"}</span></span>`;
+  b.addEventListener("click",()=>startModule(m.id));grid.appendChild(b);
+ });
+ $("progressText").textContent=`${completedThisRound.size} of 6 solved this round`;
+}
+function startModule(id){currentModule=modules.find(m=>m.id===id);selectedOption=null;$("codeEyebrow").textContent=`MISSION ${String(id).padStart(2,"0")} • ${currentModule.title.toUpperCase()}`;$("codeNumbers").innerHTML=currentModule.code.map(n=>`<span class="code-number">${n}</span>`).join("");$("codeAnswer").value="";$("codeFeedback").className="feedback";$("codeFeedback").textContent="";show("codeScreen");$("codeAnswer").focus({preventScroll:true});}
+$("backFromCode").addEventListener("click",()=>{renderModules();show("selectionScreen")});
+$("backFromQuestion").addEventListener("click",()=>{renderModules();show("selectionScreen")});
+$("codeForm").addEventListener("submit",e=>{
+ e.preventDefault();const value=$("codeAnswer").value.trim().toUpperCase();
+ if(value===currentModule.word){$("codeFeedback").className="feedback show good";$("codeFeedback").textContent="Code cracked! Case file unlocked.";setTimeout(renderQuestion,350);}
+ else{$("codeFeedback").className="feedback show bad";$("codeFeedback").textContent="Incorrect code. Review the numbers and try again.";$("codeAnswer").select();}
+});
+function renderQuestion(){
+ selectedOption=null;$("questionEyebrow").textContent=`CASE ${String(currentModule.id).padStart(2,"0")} • ${currentModule.title.toUpperCase()}`;$("questionTitle").textContent=currentModule.title;$("questionText").textContent=currentModule.question;$("questionFeedback").className="feedback";$("questionFeedback").textContent="";$("submitAnswer").disabled=false;$("submitAnswer").classList.remove("hidden");
+ const opts=$("options");opts.innerHTML="";
+ currentModule.options.forEach((text,i)=>{const b=document.createElement("button");b.type="button";b.className="option";b.innerHTML=`<span class="letter">${String.fromCharCode(65+i)}</span><span>${text}</span>`;b.addEventListener("click",()=>{selectedOption=i;opts.querySelectorAll(".option").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");$("questionFeedback").className="feedback";});opts.appendChild(b);});
+ show("questionScreen");
+}
+$("submitAnswer").addEventListener("click",()=>{
+ if(selectedOption===null){$("questionFeedback").className="feedback show bad";$("questionFeedback").textContent="Select an answer before submitting.";return;}
+ if(selectedOption===currentModule.correct){
+  $("options").querySelectorAll(".option").forEach((b,i)=>{b.disabled=true;if(i===currentModule.correct)b.classList.add("correct")});
+  $("questionFeedback").className="feedback show good";$("questionFeedback").textContent="Correct answer!";
+  $("submitAnswer").classList.add("hidden");completedThisRound.add(currentModule.id);
+  setTimeout(showSuccess,550);
+ }else{
+  const buttons=$("options").querySelectorAll(".option");buttons[selectedOption].classList.add("wrong");
+  $("questionFeedback").className="feedback show bad";$("questionFeedback").textContent="Not quite. Try another answer.";
+ }
+});
+function showSuccess(){$("successEyebrow").textContent=`CASE ${String(currentModule.id).padStart(2,"0")} CLOSED`;$("successTitle").textContent=`${currentModule.title} complete!`;show("successScreen");$("countdownFill").style.animation="none";void $("countdownFill").offsetWidth;$("countdownFill").style.animation="shrink 5s linear forwards";clearTimeout(timerId);timerId=setTimeout(finishMission,5000);}
+function finishMission(){clearTimeout(timerId);renderModules();if(completedThisRound.size===6)show("allDoneScreen");else show("selectionScreen");}
+$("returnNow").addEventListener("click",finishMission);
+$("playAgain").addEventListener("click",()=>{completedThisRound.clear();renderModules();show("selectionScreen")});
+renderModules();
+</script>
+</body>
+</html>
